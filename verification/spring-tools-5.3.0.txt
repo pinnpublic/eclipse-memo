@@ -1,0 +1,30 @@
+OK: starts with no projects
+OK: embedded in both original Explorer views
+OK: Package Explorer files visible with zero projects
+OK: Project Explorer files visible with zero projects
+OK: new memo editable and dirty
+OK: UTF-8 saved directly under workspace
+OK: same tab rebound and marked saved
+OK: saving does not create duplicate memo editor tabs
+OK: saving creates no synthetic project
+OK: saved Korean text reopens correctly
+OK: subsequent normal save updates original file
+OK: existing CP949 decoded correctly
+OK: existing CP949 encoding preserved on save
+OK: cancel save returns without writing
+OK: cancel keeps unsaved text
+OK: Save All supports a new workspace memo
+OK: Save All writes UTF-8
+OK: built-in Untitled Save command saves without a project
+OK: native Save handler restored after first save
+OK: both explorers list workspace files
+OK: metadata hidden in both explorers
+OK: file watcher refreshes both views
+OK: project directory excluded from ordinary file lists
+OK: original package and project trees still show projects
+OK: original package tree visible alongside memo area
+OK: original project tree visible alongside memo area
+OK: file selection clears stale project selection
+OK: closing and reopening Package Explorer reattaches area
+OK: closing and reopening Project Explorer reattaches area
+PASS: 29 runtime checks on 4.40.0.v20260601-0713

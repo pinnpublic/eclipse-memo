@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Eclipse Workspace Memo
+Bundle-SymbolicName: dev.eclipsememo;singleton:=true
+Bundle-Version: 1.0.1
+Bundle-Activator: dev.eclipsememo.Activator
+Bundle-Vendor: Eclipse Memo
+Bundle-Copyright: Copyright (c) 2026 pinn.public
+Bundle-License: MIT;link="LICENSE"
+Bundle-DocURL: https://github.com/pinnpublic/eclipse-memo#readme
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.core.filesystem,
+ org.eclipse.core.filebuffers,
+ org.eclipse.jface.text,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.ui.navigator
+Export-Package: dev.eclipsememo
+

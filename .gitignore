@@ -1,0 +1,31 @@
+# Generated build, test, and release files
+/.build/
+/bin/
+/dist/
+*.class
+*.log
+__pycache__/
+*.py[cod]
+
+# Local Eclipse workspace data
+/.metadata/
+
+# Keep portable PDE project settings, including under a parent repository
+!/.project
+!/.classpath
+!/.settings/
+/.settings/*
+!/.settings/org.eclipse.core.resources.prefs
+!/.settings/org.eclipse.jdt.core.prefs
+
+# Local secrets, editor backups, and operating system files
+.env
+.env.*
+!.env.example
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+

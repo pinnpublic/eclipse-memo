@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+  <extension point="org.eclipse.ui.startup">
+    <startup class="dev.eclipsememo.tests.RuntimeTests"/>
+  </extension>
+  <extension point="org.eclipse.core.runtime.applications" id="application">
+    <application><run class="dev.eclipsememo.tests.RuntimeTests"/></application>
+  </extension>
+  <extension point="org.eclipse.ui.perspectives">
+    <perspective id="dev.eclipsememo.tests.perspective" name="Workspace Memo Test"
+      class="dev.eclipsememo.tests.TestPerspective"/>
+  </extension>
+</plugin>

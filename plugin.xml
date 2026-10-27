@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension point="org.eclipse.ui.startup">
+    <startup class="dev.eclipsememo.Startup"/>
+  </extension>
+  <extension point="org.eclipse.ui.editors">
+    <editor id="dev.eclipsememo.editor" name="Workspace Memo"
+      class="dev.eclipsememo.MemoEditor"
+      contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor" default="false"/>
+  </extension>
+  <extension point="org.eclipse.ui.commands">
+    <category id="dev.eclipsememo.commands" name="Workspace Memo"/>
+    <command id="dev.eclipsememo.new" name="새 워크스페이스 메모"
+      categoryId="dev.eclipsememo.commands"/>
+    <command id="dev.eclipsememo.save" name="워크스페이스에 저장…"
+      categoryId="dev.eclipsememo.commands"/>
+  </extension>
+  <extension point="org.eclipse.ui.handlers">
+    <handler commandId="dev.eclipsememo.new" class="dev.eclipsememo.NewMemoHandler"/>
+    <handler commandId="dev.eclipsememo.save" class="dev.eclipsememo.SaveMemoHandler"/>
+  </extension>
+  <extension point="org.eclipse.ui.menus">
+    <menuContribution locationURI="menu:file?after=new">
+      <command commandId="dev.eclipsememo.new" label="새 워크스페이스 메모" style="push"/>
+      <command commandId="dev.eclipsememo.save" label="워크스페이스에 저장…" style="push"/>
+    </menuContribution>
+  </extension>
+  <extension point="org.eclipse.ui.newWizards">
+    <wizard id="dev.eclipsememo.wizard" name="Workspace Memo"
+      category="org.eclipse.ui.Basic" class="dev.eclipsememo.MemoWizard"
+      project="false" hasPages="true">
+      <description>프로젝트 없이 워크스페이스 폴더에 텍스트 파일을 만듭니다.</description>
+    </wizard>
+  </extension>
+</plugin>
