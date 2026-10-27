@@ -37,3 +37,12 @@
 - Eclipse p2로 공개 주소의 feature·플러그인 JAR 수집 성공 및 SHA-256 일치 확인
 
 이 검증은 공개 p2 저장소의 조회와 파일 수집을 확인한 것입니다. 실제 GUI 설치 후 기능 검증과 Marketplace 등록은 별도 단계입니다.
+## STS3 설치 검증 (2026-10-27)
+
+STS 3.9.18.RELEASE / Eclipse 4.21 / Java 11.0.32.1의 별도 복사본에서 공개 업데이트 사이트만 지정해 p2 director 설치를 실행했습니다.
+
+- `dev.eclipsememo.feature.feature.group` 1.0.1 설치 성공, 종료 코드 0
+- 추가된 설치 단위는 메모 플러그인과 feature 관련 3개이며, 기존 Eclipse 구성 요소의 교체·삭제는 없음
+- 사용자 STS3에서도 `Contact all update sites during install to find required software` 체크 해제 후 설치 가능 확인
+
+다른 업데이트 사이트를 함께 조회하면 구형 p2에서 외부 패키지의 PGP 공개 키 검증 오류가 발생할 수 있어, 해당 오류의 해결 방법을 설치 매뉴얼에 추가했습니다.
