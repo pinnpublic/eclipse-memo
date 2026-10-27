@@ -6,12 +6,13 @@
 
 ### 직접 설치
 
+> **STS3 3.9.18 설치 주의:** 설치 화면의 `Contact all update sites during install to find required software` 체크를 **해제한 뒤** 진행하세요.
+> 체크된 상태에서는 다른 업데이트 사이트를 함께 조회하면서 `Public key not found` 오류로 설치가 실패할 수 있습니다.
+
 1. Eclipse에서 `Help > Install New Software… > Add…`를 선택합니다.
 2. Name에 `Eclipse Workspace Memo`, Location에 `https://pinnpublic.github.io/eclipse-memo/`를 입력합니다.
 3. `Workspace Tools > Eclipse Workspace Memo`를 선택합니다.
 4. 라이선스에 동의한 뒤 설치하고 Eclipse를 재시작합니다.
-
-**STS3:** 설치 중 `Public key not found` 오류가 나면 `Contact all update sites during install to find required software` 체크를 해제하고 다시 설치하세요.
 
 ZIP 파일로 설치할 때는 [설치용 ZIP](https://github.com/pinnpublic/eclipse-memo/releases/download/v1.0.1/eclipse-workspace-memo-update-site-1.0.1.zip)을 받아 `Add… > Archive…`에서 선택합니다. 압축은 풀지 않습니다.
 
