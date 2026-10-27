@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+  <feature url="features/dev.eclipsememo.feature_1.0.1.jar"
+      id="dev.eclipsememo.feature" version="1.0.1">
+    <category name="workspace-memo"/>
+  </feature>
+  <category-def name="workspace-memo" label="Workspace Tools">
+    <description>Workspace file editing without projects.</description>
+  </category-def>
+</site>
