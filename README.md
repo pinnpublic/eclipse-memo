@@ -1,6 +1,6 @@
 # Eclipse Workspace Memo
 
-[MIT License](LICENSE) · Eclipse Marketplace 배포용 플러그인
+[MIT License](LICENSE) · 향후 Eclipse Marketplace 등록 준비
 
 프로젝트를 만들지 않고 **현재 워크스페이스 폴더에 텍스트 파일을 저장하고 편집**하는 이클립스 플러그인입니다.
 
@@ -169,17 +169,13 @@ Package Explorer나 Project Explorer 안에 `워크스페이스 파일` 영역�
 
 ## 개발 및 배포
 
-이 저장소는 **MIT 라이선스로 Eclipse Marketplace에 배포할 플러그인**의 소스와 사용 매뉴얼을 관리합니다.
+이 저장소는 **나중에 Eclipse Marketplace에 등록할 플러그인의 소스와 사용 매뉴얼을 MIT 라이선스로 보관**하는 용도입니다. 현재는 소스 관리, 문서, 빌드·검증 도구를 제공하며 Marketplace에는 아직 등록하지 않았습니다.
 
-- [개발·빌드 안내](docs/DEVELOPMENT.md): 개별 빌드, 테스트, 배포 파일 일괄 생성
-- [Marketplace 배포 안내](docs/MARKETPLACE.md): GitHub Releases, GitHub Pages 업데이트 사이트, 등록 정보
+- [개발·빌드 안내](docs/DEVELOPMENT.md): 로컬 빌드, 테스트, 배포 파일 생성
+- [향후 Marketplace 등록 안내](docs/MARKETPLACE.md): 등록 시점에 준비할 업데이트 사이트와 소개 정보
 - [검증 기록](verification/README.md): 제품별 런타임 검증과 MIT 배포 검증
 
-`build-release.ps1`로 만든 `dist/release/1.0.1/`의 파일을 GitHub Releases에 올린 뒤, `.github/workflows/publish-update-site.yml` 워크플로를 저장소에 등록하고 **Publish Eclipse update site**를 수동 실행하면 해당 릴리스의 p2 업데이트 사이트를 GitHub Pages에 게시할 수 있습니다. 공개 저장소 주소를 코드에 미리 고정할 필요가 없습니다.
-
-배포 대상 저장소는 `pinnpublic/eclipse-memo`입니다. 기본 GitHub Pages 설정을 사용할 때의 **업데이트 사이트 예정 주소**는 `https://pinnpublic.github.io/eclipse-memo/`입니다. Pages 게시와 원격 설치를 확인하기 전에는 설치 가능한 주소로 안내하지 않습니다.
-
-v1.0.1의 로컬 배포 준비와 p2 검증을 완료했습니다. Pages 배포와 Marketplace 등록은 아직 진행하지 않았습니다.
+배포가 필요할 때 `build-release.ps1`로 설치 파일과 p2 업데이트 사이트를 생성할 수 있습니다. 업데이트 사이트를 게시할 위치와 URL은 실제 Marketplace 등록을 준비할 때 정합니다.
 
 ## 라이선스
 

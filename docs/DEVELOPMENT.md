@@ -44,17 +44,17 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\build-release.ps1 `
   -JdkHome $env:JAVA_HOME
 ```
 
-이 명령은 플러그인 빌드, p2 설치 목록 조회, 실제 아티팩트 수집 및 해시 검증을 마친 뒤 GitHub Releases에 올릴 파일을 `dist/release/1.0.1/`에 모읍니다. 이전에 개별 빌드로 생성한 `dist/` 루트의 ZIP 대신 이 폴더의 파일을 배포하세요.
+이 명령은 플러그인 빌드, p2 설치 목록 조회, 실제 아티팩트 수집 및 해시 검증을 마친 뒤 나중에 배포할 파일을 `dist/release/1.0.1/`에 모읍니다. 이전에 개별 빌드로 생성한 `dist/` 루트의 ZIP 대신 이 폴더의 파일을 배포하세요.
 
 | 파일 | 용도 |
 | --- | --- |
 | `dev.eclipsememo_1.0.1.jar` | dropins 설치 |
 | `dev.eclipsememo_1.0.1.jar.sha256` | JAR 해시 |
 | `eclipse-workspace-memo-1.0.1.zip` | 매뉴얼·MIT 원문을 포함한 dropins 배포 |
-| `eclipse-workspace-memo-update-site-1.0.1.zip` | 오프라인 p2 설치 및 Pages 게시 |
+| `eclipse-workspace-memo-update-site-1.0.1.zip` | 오프라인 p2 설치 |
 | `SHA256SUMS` | 위 파일들의 SHA-256 목록 |
 
-호스팅할 p2 폴더는 `dist/marketplace/update-site/`에 남습니다. 소스 파일만 Git에 커밋하고 `dist/`의 배포 파일은 GitHub Releases의 첨부 파일로 올립니다. 공개 URL 게시와 Marketplace 등록 순서는 [Marketplace 배포 문서](MARKETPLACE.md)에 있습니다.
+호스팅할 p2 폴더는 `dist/marketplace/update-site/`에 남습니다. 소스 파일만 Git에 커밋하며 `dist/`의 배포 파일은 Git에서 제외합니다. 실제 배포 시점에 필요하면 GitHub Releases 등의 경로로 제공합니다. 공개 URL 게시와 Marketplace 등록 순서는 [Marketplace 배포 문서](MARKETPLACE.md)에 있습니다.
 
 ## 새 버전 준비
 

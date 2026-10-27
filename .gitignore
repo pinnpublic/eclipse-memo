@@ -4,8 +4,6 @@
 /dist/
 *.class
 *.log
-__pycache__/
-*.py[cod]
 
 # Local Eclipse workspace data
 /.metadata/
