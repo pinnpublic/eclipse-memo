@@ -1,8 +1,6 @@
-# Eclipse Workspace Memo 사용 매뉴얼
+# Eclipse Workspace Memo
 
 [MIT License](LICENSE) · Eclipse Marketplace 배포용 플러그인
-
-[소스 저장소](https://github.com/pinnpublic/eclipse-memo) · [릴리스](https://github.com/pinnpublic/eclipse-memo/releases) · [문제 제보](https://github.com/pinnpublic/eclipse-memo/issues)
 
 프로젝트를 만들지 않고 **현재 워크스페이스 폴더에 텍스트 파일을 저장하고 편집**하는 이클립스 플러그인입니다.
 
@@ -17,19 +15,6 @@ workspace/
 └─ ExistingProject/    # 기존 프로젝트 트리에서 표시
 ```
 
-## 목차
-
-- [빠른 시작](#빠른-시작)
-- [지원 환경](#지원-환경)
-- [설치](#설치)
-- [사용법](#사용법)
-- [파일 이름과 인코딩](#파일-이름과-인코딩)
-- [표시 범위와 제한](#표시-범위와-제한)
-- [문제 해결](#문제-해결)
-- [업데이트와 제거](#업데이트와-제거)
-- [개발 및 배포](#개발-및-배포)
-- [라이선스](#라이선스)
-
 ## 빠른 시작
 
 1. 아래 설치 방법 중 하나로 플러그인을 설치하고 Eclipse 또는 STS를 재시작합니다.
@@ -41,17 +26,7 @@ workspace/
 
 저장 위치는 **현재 Eclipse 워크스페이스의 최상위 폴더**입니다. 프로젝트나 프로젝트 안의 `src` 폴더에 저장되지 않습니다. `워크스페이스 파일` 제목에 마우스를 올리면 실제 경로를 확인할 수 있습니다.
 
-## 지원 환경
-
-- Spring Tool Suite 3.9.18.RELEASE / Java 11
-- Eclipse IDE 2026-06 (4.40.0) / Java 21 이상
-- Spring Tools for Eclipse 5.3.0.RELEASE / 제품에서 사용하는 Java 런타임
-
-플러그인 자체는 Java 11 바이트코드로 빌드합니다. 제품의 기존 Java 실행 설정을 유지하세요. 사용자 설치에는 JDK나 PowerShell로 직접 빌드하는 과정이 필요하지 않습니다. 소스에서 배포 파일을 만들 때만 개발 도구가 필요합니다.
-
 ## 설치
-
-GitHub 소스에는 `dist/` 배포 파일이 포함되지 않습니다. [Releases](https://github.com/pinnpublic/eclipse-memo/releases)에 게시된 설치 파일을 받거나 [개발·빌드 안내](docs/DEVELOPMENT.md)의 절차로 생성한 뒤 설치하세요. 릴리스 게시 전에는 직접 빌드해야 합니다. 현재 문서는 버전 **1.0.1**을 기준으로 설명합니다.
 
 | 받은 파일 | 설치 방법 |
 | --- | --- |
