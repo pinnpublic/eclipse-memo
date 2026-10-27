@@ -214,6 +214,35 @@ public final class RuntimeTests implements IApplication, org.eclipse.ui.IStartup
         check(javaViewer.getTree().isVisible(), "original package tree visible alongside memo area");
         page.activate(projects); pump();
         check(resourceViewer.getTree().isVisible(), "original project tree visible alongside memo area");
+        for (IViewPart explorer : Arrays.asList(packages, projects)) {
+            page.activate(explorer); pump();
+            FilePane pane = plugin.bridge().pane(explorer);
+            Composite heading = (Composite) pane.viewer().getTree().getParent().getChildren()[0];
+            org.eclipse.swt.graphics.RGB background = heading.getBackground().getRGB();
+            check(!background.equals(pane.viewer().getTree().getBackground().getRGB()), "memo heading contrasts with file list");
+            for (int eventType : new int[] { SWT.MouseEnter, SWT.MouseExit, SWT.FocusIn, SWT.FocusOut }) {
+                heading.notifyListeners(eventType, new org.eclipse.swt.widgets.Event());
+                heading.redraw(); heading.update();
+            }
+            page.activate(editor); pump();
+            page.activate(explorer); pump();
+            check(background.equals(heading.getBackground().getRGB()), "heading background survives hover and focus changes");
+            // Eclipse theme styling can reset Composite backgrounds after creation.
+            heading.setBackground(pane.viewer().getTree().getBackground());
+            heading.redraw(); heading.update();
+            check(background.equals(heading.getBackground().getRGB()), "heading background recovers after theme repaint");
+        }
+        page.activate(packages); pump();
+        Shell screenshotShell = page.getWorkbenchWindow().getShell();
+        org.eclipse.swt.graphics.Rectangle client = screenshotShell.getClientArea();
+        org.eclipse.swt.graphics.Image screenshot = new org.eclipse.swt.graphics.Image(display, client.width, client.height);
+        org.eclipse.swt.graphics.GC screenshotGc = new org.eclipse.swt.graphics.GC(screenshotShell);
+        try {
+            screenshotGc.copyArea(screenshot, client.x, client.y);
+            org.eclipse.swt.graphics.ImageLoader loader = new org.eclipse.swt.graphics.ImageLoader();
+            loader.data = new org.eclipse.swt.graphics.ImageData[] { screenshot.getImageData() };
+            loader.save(Path.of(System.getProperty("workspaceMemo.test.result")).resolveSibling("header-focus.png").toString(), SWT.IMAGE_PNG);
+        } finally { screenshotGc.dispose(); screenshot.dispose(); }
         javaViewer.setSelection(new StructuredSelection(javaProject));
         packagePane.viewer().setSelection(new StructuredSelection(packagePane.viewer().getTree().getItem(0).getData()));
         check(javaViewer.getSelection().isEmpty(), "file selection clears stale project selection");

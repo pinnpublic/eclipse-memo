@@ -11,7 +11,7 @@ New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
 $javaTool = if ($JdkHome) { Join-Path $JdkHome 'bin\java.exe' } else { (Get-Command java).Source }
 $jarTool = Join-Path (Split-Path $javaTool) 'jar.exe'
 $plugins = Join-Path $EclipseHome 'plugins'
-$mainJar = Join-Path $repoRoot 'dist\dev.eclipsememo_1.0.1.jar'
+$mainJar = Join-Path $repoRoot 'dist\dev.eclipsememo_1.0.2.jar'
 if (!(Test-Path -LiteralPath $mainJar)) { throw 'Run build.ps1 first.' }
 $work = Join-Path $repoRoot ('.build\p2-' + [Guid]::NewGuid().ToString('N'))
 $stage = Join-Path $work 'stage'
@@ -19,7 +19,7 @@ $repository = Join-Path $work 'repository'
 $configuration = Join-Path $work 'configuration'
 New-Item -ItemType Directory -Force -Path (Join-Path $stage 'plugins'), (Join-Path $stage 'features'), $repository, $configuration | Out-Null
 Copy-Item -LiteralPath $mainJar -Destination (Join-Path $stage 'plugins')
-$featureJar = Join-Path $stage 'features\dev.eclipsememo.feature_1.0.1.jar'
+$featureJar = Join-Path $stage 'features\dev.eclipsememo.feature_1.0.2.jar'
 & $jarTool --create --file $featureJar -C (Join-Path $repoRoot 'feature') feature.xml -C $repoRoot LICENSE
 if ($LASTEXITCODE -ne 0) { throw 'Feature packaging failed.' }
 
@@ -50,21 +50,41 @@ $configLines = @(
 $launcher = Get-ChildItem -LiteralPath $plugins -Filter 'org.eclipse.equinox.launcher_*.jar' | Select-Object -First 1
 $launcherArgs = @('-jar', $launcher.FullName, '-install', $EclipseHome,
     '-configuration', $configuration, '-nosplash', '-consoleLog')
+function Invoke-P2 {
+    param([Parameter(ValueFromRemainingArguments = $true)][string[]]$Arguments)
+    $previousPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        & $javaTool @launcherArgs @Arguments
+        $p2Exit = $LASTEXITCODE
+    } finally { $ErrorActionPreference = $previousPreference }
+    if ($p2Exit -ne 0) { throw "p2 failed with exit code $p2Exit." }
+}
 $repositoryUri = ConvertTo-FileUri $repository
-& $javaTool @launcherArgs -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher -metadataRepository $repositoryUri -artifactRepository $repositoryUri -source $stage -publishArtifacts -compress
-if ($LASTEXITCODE -ne 0) { throw 'p2 feature/bundle publishing failed.' }
-& $javaTool @launcherArgs -application org.eclipse.equinox.p2.publisher.CategoryPublisher -metadataRepository $repositoryUri -categoryDefinition (ConvertTo-FileUri (Join-Path $repoRoot 'feature\category.xml')) -compress
-if ($LASTEXITCODE -ne 0) { throw 'p2 category publishing failed.' }
+Invoke-P2 -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher -metadataRepository $repositoryUri -artifactRepository $repositoryUri -source $stage -publishArtifacts -compress
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$metadataArchive = [IO.Compression.ZipFile]::OpenRead((Join-Path $repository 'content.jar'))
+try {
+    $reader = [IO.StreamReader]::new($metadataArchive.GetEntry('content.xml').Open(), [Text.Encoding]::UTF8)
+    try { [xml]$metadata = $reader.ReadToEnd() } finally { $reader.Dispose() }
+} finally { $metadataArchive.Dispose() }
+$bundleUnit = $metadata.repository.units.unit | Where-Object { $_.id -eq 'dev.eclipsememo' }
+$hostRequirements = @($bundleUnit.requires.required | Where-Object { $_.namespace -eq 'osgi.bundle' })
+if ($hostRequirements.Count -ne 10 -or
+    @($hostRequirements | Where-Object { $_.greedy -ne 'false' -or $_.optional -eq 'true' }).Count) {
+    throw 'Host IDE requirements must remain mandatory and non-greedy. Check META-INF/p2.inf packaging.'
+}
+Invoke-P2 -application org.eclipse.equinox.p2.publisher.CategoryPublisher -metadataRepository $repositoryUri -categoryDefinition (ConvertTo-FileUri (Join-Path $repoRoot 'feature\category.xml')) -compress
 Copy-Item -LiteralPath (Join-Path $repoRoot 'feature\category.xml') -Destination (Join-Path $repository 'category.xml')
 Copy-Item -LiteralPath (Join-Path $repoRoot 'LICENSE') -Destination $repository
-$zipName = 'eclipse-workspace-memo-update-site-1.0.1.zip'
+$zipName = 'eclipse-workspace-memo-update-site-1.0.2.zip'
 $zipPath = Join-Path $work $zipName
 # Windows PowerShell Compress-Archive writes backslashes into ZIP member names.
 # p2 resolves artifact URLs with '/', so package with the JDK ZIP/JAR writer.
 & $jarTool --create --no-manifest --file $zipPath -C $repository .
 if ($LASTEXITCODE -ne 0) { throw 'Update-site ZIP packaging failed.' }
 $entries = & $jarTool --list --file $zipPath
-foreach ($entry in @('plugins/dev.eclipsememo_1.0.1.jar', 'features/dev.eclipsememo.feature_1.0.1.jar')) {
+foreach ($entry in @('plugins/dev.eclipsememo_1.0.2.jar', 'features/dev.eclipsememo.feature_1.0.2.jar')) {
     if ($entries -cnotcontains $entry) { throw "Missing exact ZIP entry: $entry" }
 }
 if ($entries | Where-Object { $_.Contains('\') }) { throw 'ZIP member names must use forward slashes.' }
@@ -86,9 +106,8 @@ if ($listExit -ne 0 -or !(($listOutput -join "`n") -match 'dev\.eclipsememo\.fea
     throw 'p2 could not read the installable feature from the finished ZIP.'
 }
 $mirror = Join-Path $work 'collected-artifacts'
-& $javaTool @launcherArgs -application org.eclipse.equinox.p2.artifact.repository.mirrorApplication -source $archiveUri -destination (ConvertTo-FileUri $mirror) -verbose
-if ($LASTEXITCODE -ne 0) { throw 'p2 could not collect the artifacts from the finished ZIP.' }
-foreach ($entry in @('plugins/dev.eclipsememo_1.0.1.jar', 'features/dev.eclipsememo.feature_1.0.1.jar')) {
+Invoke-P2 -application org.eclipse.equinox.p2.artifact.repository.mirrorApplication -source $archiveUri -destination (ConvertTo-FileUri $mirror) -verbose
+foreach ($entry in @('plugins/dev.eclipsememo_1.0.2.jar', 'features/dev.eclipsememo.feature_1.0.2.jar')) {
     $collected = Join-Path $mirror $entry
     if (!(Test-Path -LiteralPath $collected)) { throw "p2 did not collect: $entry" }
     if ((Get-FileHash -LiteralPath $collected -Algorithm SHA256).Hash -ne

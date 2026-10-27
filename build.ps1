@@ -23,11 +23,11 @@ $argFile = Join-Path $repoRoot '.build\javac.args'
 [IO.File]::WriteAllLines($argFile, $compilerArgs, [Text.UTF8Encoding]::new($false))
 & $javaCompiler "@$argFile"
 if ($LASTEXITCODE -ne 0) { throw 'Java compilation failed.' }
-$jarPath = Join-Path $output 'dev.eclipsememo_1.0.1.jar'
-& $jarTool --create --file $jarPath --manifest (Join-Path $repoRoot 'META-INF\MANIFEST.MF') -C $classes . -C $repoRoot plugin.xml -C $repoRoot LICENSE
+$jarPath = Join-Path $output 'dev.eclipsememo_1.0.2.jar'
+& $jarTool --create --file $jarPath --manifest (Join-Path $repoRoot 'META-INF\MANIFEST.MF') -C $classes . -C $repoRoot plugin.xml -C $repoRoot LICENSE -C $repoRoot META-INF/p2.inf
 if ($LASTEXITCODE -ne 0) { throw 'Plug-in packaging failed.' }
 $hash = (Get-FileHash -LiteralPath $jarPath -Algorithm SHA256).Hash.ToLowerInvariant()
-[IO.File]::WriteAllText("$jarPath.sha256", "$hash  dev.eclipsememo_1.0.1.jar`n", [Text.UTF8Encoding]::new($false))
+[IO.File]::WriteAllText("$jarPath.sha256", "$hash  dev.eclipsememo_1.0.2.jar`n", [Text.UTF8Encoding]::new($false))
 $packageRoot = Join-Path $repoRoot ('.build\package-' + [DateTime]::Now.ToString('yyyyMMdd-HHmmssfff'))
 $dropins = Join-Path $packageRoot 'dropins'
 New-Item -ItemType Directory -Force -Path $dropins | Out-Null
@@ -38,7 +38,7 @@ Copy-Item -LiteralPath (Join-Path $repoRoot 'docs') -Destination $packageRoot -R
 if (Test-Path -LiteralPath (Join-Path $repoRoot 'verification')) {
     Copy-Item -LiteralPath (Join-Path $repoRoot 'verification') -Destination $packageRoot -Recurse
 }
-$zipPath = Join-Path $output 'eclipse-workspace-memo-1.0.1.zip'
+$zipPath = Join-Path $output 'eclipse-workspace-memo-1.0.2.zip'
 Compress-Archive -Path (Join-Path $packageRoot '*') -DestinationPath $zipPath -Force
 Write-Output "Built $jarPath (Java 11 bytecode)"
 Write-Output "Packaged $zipPath"

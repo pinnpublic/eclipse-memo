@@ -5,6 +5,7 @@ param(
     [string]$Label = 'eclipse',
     [string]$ReuseConfiguration,
     [string]$RuntimeBase = (Join-Path $PSScriptRoot '.build'),
+    [switch]$UseInstalledPlugin,
     [switch]$KeepOpen
 )
 $ErrorActionPreference = 'Stop'
@@ -19,8 +20,10 @@ New-Item -ItemType Directory -Force -Path $configuration, $workspace, $classes |
 $platformClasspath = (Get-ChildItem -LiteralPath $pluginDir -Filter '*.jar' |
     Where-Object { $_.Name -match '^(org\.eclipse\.(core|equinox|osgi|jface|swt|ui|text|jdt)|org\.osgi)' } |
     ForEach-Object { $_.FullName.Replace('\', '/') }) -join ';'
-$mainJar = Join-Path $runtimeRoot 'dev.eclipsememo_1.0.1.jar'
-Copy-Item -LiteralPath (Join-Path $repoRoot 'dist\dev.eclipsememo_1.0.1.jar') -Destination $mainJar
+$mainJar = Join-Path $runtimeRoot 'dev.eclipsememo_1.0.2.jar'
+$pluginSource = if ($UseInstalledPlugin) { Join-Path $pluginDir 'dev.eclipsememo_1.0.2.jar' }
+    else { Join-Path $repoRoot 'dist\dev.eclipsememo_1.0.2.jar' }
+Copy-Item -LiteralPath $pluginSource -Destination $mainJar
 $argsForCompiler = @('--release', '11', '-encoding', 'UTF-8', '-d', ('"' + $classes.Replace('\', '/') + '"'),
     '-classpath', ('"' + $mainJar.Replace('\', '/') + ';' + $platformClasspath + '"'))
 $argsForCompiler += Get-ChildItem -LiteralPath (Join-Path $repoRoot 'tests\plugin\src') -Filter '*.java' -Recurse |
@@ -39,11 +42,18 @@ $bundleLines = Get-Content -LiteralPath (Join-Path $EclipseHome 'configuration\o
         if ($_.StartsWith('#') -or !$_.Trim()) { $_ }
         else {
             $fields = $_ -split ','
+            if ($fields[0] -eq 'dev.eclipsememo.tests') { return }
+            if ($fields[0] -eq 'dev.eclipsememo' -and !$UseInstalledPlugin) { return }
             if (!($fields[2] -match '^[a-z]+:')) { $fields[2] = ConvertTo-FileUri (Join-Path $EclipseHome $fields[2]) }
             $fields -join ','
         }
     }
-$bundleLines += 'dev.eclipsememo,1.0.1,' + (ConvertTo-FileUri $mainJar) + ',4,false'
+if ($UseInstalledPlugin) {
+    $installedEntries = @($bundleLines | Where-Object { $_ -match '^dev\.eclipsememo,' })
+    if ($installedEntries.Count -ne 1 -or $installedEntries[0] -notmatch '^dev\.eclipsememo,1\.0\.2,') {
+        throw 'The installed bundles.info must enable exactly one Memo 1.0.2 bundle.'
+    }
+} else { $bundleLines += 'dev.eclipsememo,1.0.2,' + (ConvertTo-FileUri $mainJar) + ',4,false' }
 $bundleLines += 'dev.eclipsememo.tests,1.0.0,' + (ConvertTo-FileUri $testJar) + ',4,false'
 $bundleInfo = Join-Path $configuration 'bundles.info'
 [IO.File]::WriteAllLines($bundleInfo, $bundleLines, [Text.UTF8Encoding]::new($false))
@@ -66,8 +76,11 @@ $launcher = Get-ChildItem -LiteralPath $pluginDir -Filter 'org.eclipse.equinox.l
 $resultFile = Join-Path $runtimeRoot 'results.txt'
 Write-Output "Test workspace: $workspace"
 Write-Output "Result file: $resultFile"
-& (Join-Path $JdkHome 'bin\java.exe') '-DworkspaceMemo.test.realWorkbench=true' "-DworkspaceMemo.test.result=$resultFile" "-DworkspaceMemo.test.keepOpen=$($KeepOpen.IsPresent.ToString().ToLowerInvariant())" -Xmx1536m -jar $launcher.FullName -install $EclipseHome -configuration $configuration -data $workspace -application org.eclipse.ui.ide.workbench -clean -consoleLog -nosplash
-$runtimeExit = $LASTEXITCODE
+try {
+    $ErrorActionPreference = 'Continue'
+    & (Join-Path $JdkHome 'bin\java.exe') '-DworkspaceMemo.test.realWorkbench=true' "-DworkspaceMemo.test.result=$resultFile" "-DworkspaceMemo.test.keepOpen=$($KeepOpen.IsPresent.ToString().ToLowerInvariant())" -Xmx1536m -jar $launcher.FullName -install $EclipseHome -configuration $configuration -data $workspace -application org.eclipse.ui.ide.workbench -clean -consoleLog -nosplash
+    $runtimeExit = $LASTEXITCODE
+} finally { $ErrorActionPreference = 'Stop' }
 if (Test-Path -LiteralPath $resultFile) {
     $testResultLines = Get-Content -LiteralPath $resultFile -Encoding UTF8
     $testResultLines

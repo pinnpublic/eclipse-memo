@@ -44,14 +44,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\build-release.ps1 `
   -JdkHome $env:JAVA_HOME
 ```
 
-이 명령은 플러그인 빌드, p2 설치 목록 조회, 실제 아티팩트 수집 및 해시 검증을 마친 뒤 나중에 배포할 파일을 `dist/release/1.0.1/`에 모읍니다. 이전에 개별 빌드로 생성한 `dist/` 루트의 ZIP 대신 이 폴더의 파일을 배포하세요.
+이 명령은 플러그인 빌드, p2 설치 목록 조회, 실제 아티팩트 수집 및 해시 검증을 마친 뒤 나중에 배포할 파일을 `dist/release/1.0.2/`에 모읍니다. 이전에 개별 빌드로 생성한 `dist/` 루트의 ZIP 대신 이 폴더의 파일을 배포하세요.
 
 | 파일 | 용도 |
 | --- | --- |
-| `dev.eclipsememo_1.0.1.jar` | dropins 설치 |
-| `dev.eclipsememo_1.0.1.jar.sha256` | JAR 해시 |
-| `eclipse-workspace-memo-1.0.1.zip` | 매뉴얼·MIT 원문을 포함한 dropins 배포 |
-| `eclipse-workspace-memo-update-site-1.0.1.zip` | 오프라인 p2 설치 |
+| `dev.eclipsememo_1.0.2.jar` | dropins 설치 |
+| `dev.eclipsememo_1.0.2.jar.sha256` | JAR 해시 |
+| `eclipse-workspace-memo-1.0.2.zip` | 매뉴얼·MIT 원문을 포함한 dropins 배포 |
+| `eclipse-workspace-memo-update-site-1.0.2.zip` | 오프라인 p2 설치 |
 | `SHA256SUMS` | 위 파일들의 SHA-256 목록 |
 
 호스팅할 p2 폴더는 `dist/marketplace/update-site/`에 남습니다. 소스 파일만 Git에 커밋하며 `dist/`의 배포 파일은 Git에서 제외합니다. 실제 배포 시점에 필요하면 GitHub Releases 등의 경로로 제공합니다. 공개 URL 게시와 Marketplace 등록 순서는 [Marketplace 배포 문서](MARKETPLACE.md)에 있습니다.
@@ -60,6 +60,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\build-release.ps1 `
 
 `META-INF/MANIFEST.MF`, `feature/feature.xml`, `feature/category.xml`과 빌드·테스트 스크립트의 버전 및 파일 이름을 함께 변경하고 문서의 배포 버전도 갱신합니다. 이미 공개한 버전의 바이너리를 바꿀 때는 새 버전을 사용하세요.
 
-검증 기록은 [verification/README.md](../verification/README.md)에 있습니다. 현재 UI 런타임 검증 기록은 1.0.0 기준이며, 1.0.1의 MIT 배포 검증과 구분해 기록합니다.
+검증 기록은 [verification/README.md](../verification/README.md)에 버전별로 정리합니다. `META-INF/p2.inf`는 호스트 IDE 의존성을 필수로 유지하면서 `greedy=false`로 게시합니다. `build-update-site.ps1`은 게시된 메타데이터에서도 이를 검사합니다.
 
 [사용 매뉴얼로 돌아가기](../README.md)

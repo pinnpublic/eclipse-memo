@@ -14,7 +14,7 @@
 
 ### 1. 배포 파일 생성
 
-[개발·빌드 안내](DEVELOPMENT.md)에 따라 `build-release.ps1`을 실행합니다. 설치용 JAR, ZIP, 체크섬은 `dist/release/1.0.1/`에, 호스팅할 p2 업데이트 사이트는 `dist/marketplace/update-site/`에 생성됩니다.
+[개발·빌드 안내](DEVELOPMENT.md)에 따라 `build-release.ps1`을 실행합니다. 설치용 JAR, ZIP, 체크섬은 `dist/release/1.0.2/`에, 호스팅할 p2 업데이트 사이트는 `dist/marketplace/update-site/`에 생성됩니다.
 
 배포 파일은 Git 소스에 포함하지 않습니다. 배포 시점에 필요하면 [GitHub Releases](https://github.com/pinnpublic/eclipse-memo/releases) 등으로 제공할 수 있습니다.
 
@@ -33,7 +33,7 @@
 | 항목 | 준비할 내용 |
 | --- | --- |
 | 이름 | Eclipse Workspace Memo |
-| 버전 | 등록할 배포 버전 — 현재 소스는 1.0.1 |
+| 버전 | 등록할 배포 버전 — 현재 소스는 1.0.2 |
 | 라이선스 | MIT |
 | Feature ID | `dev.eclipsememo.feature` |
 | p2 설치 단위 ID | `dev.eclipsememo.feature.feature.group` |

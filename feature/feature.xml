@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature id="dev.eclipsememo.feature" label="Eclipse Workspace Memo"
-    version="1.0.1" provider-name="Eclipse Memo">
+    version="1.0.2" provider-name="Eclipse Memo">
   <description url="https://github.com/pinnpublic/eclipse-memo">프로젝트 없이 워크스페이스 폴더의 메모를 저장하고 두 탐색기에서 편집합니다.</description>
   <copyright>Copyright (c) 2026 pinn.public</copyright>
   <license url="https://opensource.org/license/mit"><![CDATA[
@@ -27,5 +27,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
   ]]></license>
   <plugin id="dev.eclipsememo" download-size="0" install-size="0"
-      version="1.0.1" unpack="false"/>
+      version="1.0.2" unpack="false"/>
 </feature>

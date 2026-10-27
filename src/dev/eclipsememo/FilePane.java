@@ -17,6 +17,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -73,6 +74,25 @@ public final class FilePane implements AutoCloseable {
         toolbar.add(newFolder);
         toolbar.add(refresh);
         toolbar.createControl(heading);
+        // Explorer focus/theme repaints must not make this heading blend into the file tree.
+        Color headingBackground = heading.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
+        Color headingForeground = heading.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
+        heading.setBackgroundMode(SWT.INHERIT_FORCE);
+        heading.setBackground(headingBackground);
+        title.setBackground(headingBackground);
+        title.setForeground(headingForeground);
+        toolbar.getControl().setBackground(headingBackground);
+        heading.addPaintListener(event -> {
+            if (!headingBackground.equals(heading.getBackground())) heading.setBackground(headingBackground);
+            if (!headingBackground.equals(title.getBackground())) title.setBackground(headingBackground);
+            if (!headingBackground.equals(toolbar.getControl().getBackground()))
+                toolbar.getControl().setBackground(headingBackground);
+            event.gc.setBackground(headingBackground);
+            event.gc.fillRectangle(heading.getClientArea());
+            event.gc.setForeground(heading.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+            int bottom = heading.getClientArea().height - 1;
+            event.gc.drawLine(0, bottom, heading.getClientArea().width, bottom);
+        });
         viewer = new TreeViewer(fileArea, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
         viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         viewer.getControl().setToolTipText(files.root().toString());

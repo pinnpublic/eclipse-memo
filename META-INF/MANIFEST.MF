@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse Workspace Memo
 Bundle-SymbolicName: dev.eclipsememo;singleton:=true
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.2
 Bundle-Activator: dev.eclipsememo.Activator
 Bundle-Vendor: Eclipse Memo
 Bundle-Copyright: Copyright (c) 2026 pinn.public
