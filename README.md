@@ -18,9 +18,7 @@ ZIP 파일로 설치할 때는 [설치용 ZIP](https://github.com/pinnpublic/ecl
 
 JAR로 설치하려면 Eclipse를 종료하고 [dev.eclipsememo_1.0.2.jar](https://github.com/pinnpublic/eclipse-memo/releases/download/v1.0.2/dev.eclipsememo_1.0.2.jar)를 **Eclipse 설치 폴더의 `dropins` 폴더**에 복사한 뒤 다시 실행합니다. 설치 방법 중 하나만 사용하세요.
 
-### Eclipse Marketplace 설치 — 등록 후 제공 예정
-
-현재는 Marketplace 등록 전입니다. 등록 후에는 다음 방법으로 설치할 수 있습니다.
+### Eclipse Marketplace 설치
 
 1. `Help > Eclipse Marketplace…`를 엽니다.
 2. `Eclipse Workspace Memo`를 검색하고 `Install`을 누릅니다.
