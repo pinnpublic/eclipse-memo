@@ -6,12 +6,14 @@
 
 ### 직접 설치
 
-1. 설치용 `eclipse-workspace-memo-update-site-1.0.1.zip`을 준비합니다.
-2. Eclipse에서 `Help > Install New Software… > Add… > Archive…`를 선택합니다.
-3. ZIP 파일을 선택합니다. 압축은 풀지 않습니다.
-4. `Workspace Tools > Eclipse Workspace Memo`를 선택하고, 라이선스에 동의한 뒤 설치하고 재시작합니다.
+1. Eclipse에서 `Help > Install New Software… > Add…`를 선택합니다.
+2. Name에 `Eclipse Workspace Memo`, Location에 `https://pinnpublic.github.io/eclipse-memo/`를 입력합니다.
+3. `Workspace Tools > Eclipse Workspace Memo`를 선택합니다.
+4. 라이선스에 동의한 뒤 설치하고 Eclipse를 재시작합니다.
 
-JAR로 설치하려면 Eclipse를 종료하고 `dev.eclipsememo_1.0.1.jar`를 **Eclipse 설치 폴더의 `dropins` 폴더**에 복사한 뒤 다시 실행합니다. 두 설치 방법 중 하나만 사용하세요.
+ZIP 파일로 설치할 때는 `Add… > Archive…`에서 설치용 업데이트 사이트 ZIP을 선택합니다. 압축은 풀지 않습니다.
+
+JAR로 설치하려면 Eclipse를 종료하고 `dev.eclipsememo_1.0.1.jar`를 **Eclipse 설치 폴더의 `dropins` 폴더**에 복사한 뒤 다시 실행합니다. 설치 방법 중 하나만 사용하세요.
 
 ### Eclipse Marketplace 설치 — 등록 후 제공 예정
 

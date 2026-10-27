@@ -27,4 +27,13 @@
 - 수집한 플러그인·feature JAR의 SHA-256이 게시 원본과 일치
 - HTTPS 호스팅용 `dist/marketplace/update-site/` 출력 확인
 
-공개 서버에 게시한 뒤의 원격 설치와 Marketplace 등록은 아직 진행하지 않았습니다.
+## 공개 업데이트 사이트 검증 (2026-10-27)
+
+업데이트 사이트: https://pinnpublic.github.io/eclipse-memo/
+
+- 공개 사이트 루트 HTTP 200 확인
+- 메타데이터, 라이선스, feature·플러그인 파일 6개를 HTTPS로 다운로드하고 게시 원본과 SHA-256 일치 확인
+- Eclipse p2 director로 공개 주소에서 `dev.eclipsememo.feature.feature.group=1.0.1` 조회 성공
+- Eclipse p2로 공개 주소의 feature·플러그인 JAR 수집 성공 및 SHA-256 일치 확인
+
+이 검증은 공개 p2 저장소의 조회와 파일 수집을 확인한 것입니다. 실제 GUI 설치 후 기능 검증과 Marketplace 등록은 별도 단계입니다.

@@ -1,6 +1,6 @@
-# 향후 Eclipse Marketplace 등록 안내
+# Eclipse Marketplace 등록 안내
 
-이 저장소는 나중에 Eclipse Marketplace에 등록할 플러그인의 소스와 사용 매뉴얼을 보관합니다. 현재 Marketplace 등록과 공개 업데이트 사이트 운영은 시작하지 않았습니다.
+이 저장소는 Eclipse Marketplace에 등록할 플러그인의 소스와 사용 매뉴얼을 보관합니다. 공개 업데이트 사이트를 제공하며, Marketplace 등록은 아직 완료하지 않았습니다.
 
 | 항목 | 현재 내용 |
 | --- | --- |
@@ -8,7 +8,7 @@
 | 지원·문제 제보 | https://github.com/pinnpublic/eclipse-memo/issues |
 | 라이선스 | [MIT License](../LICENSE) |
 | 저작권자 | pinn.public |
-| 업데이트 사이트 URL | 등록 준비 시 결정 |
+| 업데이트 사이트 URL | https://pinnpublic.github.io/eclipse-memo/ |
 
 ## 등록할 때 준비할 것
 
@@ -20,7 +20,7 @@
 
 ### 2. 업데이트 사이트 게시와 설치 확인
 
-Marketplace 등록을 준비할 때 HTTPS로 접근할 수 있는 호스팅 위치를 정하고, 생성된 p2 업데이트 사이트 폴더의 파일과 하위 폴더 전체를 게시합니다. 특정 호스팅 서비스나 자동 배포 방식을 전제로 하지 않습니다.
+업데이트 사이트는 `gh-pages` 브랜치의 p2 파일을 GitHub Pages로 게시합니다. 등록 폼의 **Update Site URL**에는 `https://pinnpublic.github.io/eclipse-memo/`를 입력합니다. 별도의 사용자 워크플로 파일은 사용하지 않습니다.
 
 공개 주소를 Eclipse의 `Help > Install New Software… > Add…`에 입력해 설치하고, MIT 라이선스 표시와 재시작 후 동작을 확인합니다. 소스 저장소 주소나 ZIP 다운로드 주소를 업데이트 사이트 URL로 넣지 않습니다.
 
@@ -39,7 +39,7 @@ Marketplace 등록을 준비할 때 HTTPS로 접근할 수 있는 호스팅 위�
 | p2 설치 단위 ID | `dev.eclipsememo.feature.feature.group` |
 | 소스·문서 주소 | https://github.com/pinnpublic/eclipse-memo |
 | 지원 주소 | https://github.com/pinnpublic/eclipse-memo/issues |
-| 업데이트 사이트 | 위에서 게시하고 설치를 확인한 HTTPS 주소 |
+| 업데이트 사이트 | https://pinnpublic.github.io/eclipse-memo/ |
 | 지원 환경 | 실제 검증한 Eclipse·STS·Java 버전 |
 | 소개·스크린샷 | 기능 소개와 실제 탐색기 사용 화면 |
 
