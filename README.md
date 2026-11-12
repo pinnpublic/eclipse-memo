@@ -2,6 +2,8 @@
 
 프로젝트 없이 현재 워크스페이스 폴더에 메모를 저장하고 편집하는 Eclipse 플러그인입니다. Package Explorer와 Project Explorer에 `워크스페이스 파일` 영역을 추가합니다.
 
+현재 버전: [1.0.5](https://github.com/pinnpublic/eclipse-memo/releases/tag/v1.0.5). 파일 영역을 숨기거나 다시 표시할 수 있으며, 표시 상태는 탐색기별로 저장됩니다.
+
 ## 설치
 
 ### 직접 설치
@@ -14,9 +16,9 @@
 3. `Workspace Tools > Eclipse Workspace Memo`를 선택합니다.
 4. 라이선스에 동의한 뒤 설치하고 Eclipse를 재시작합니다.
 
-ZIP 파일로 설치할 때는 [설치용 ZIP](https://github.com/pinnpublic/eclipse-memo/releases/download/v1.0.2/eclipse-workspace-memo-update-site-1.0.2.zip)을 받아 `Add… > Archive…`에서 선택합니다. 압축은 풀지 않습니다.
+ZIP 파일로 설치할 때는 [1.0.5 설치용 ZIP](https://github.com/pinnpublic/eclipse-memo/releases/download/v1.0.5/eclipse-workspace-memo-update-site-1.0.5.zip)을 받아 `Add… > Archive…`에서 선택합니다. 압축은 풀지 않습니다.
 
-JAR로 설치하려면 Eclipse를 종료하고 [dev.eclipsememo_1.0.2.jar](https://github.com/pinnpublic/eclipse-memo/releases/download/v1.0.2/dev.eclipsememo_1.0.2.jar)를 **Eclipse 설치 폴더의 `dropins` 폴더**에 복사한 뒤 다시 실행합니다. 설치 방법 중 하나만 사용하세요.
+JAR로 설치하려면 Eclipse를 종료하고 [dev.eclipsememo_1.0.5.jar](https://github.com/pinnpublic/eclipse-memo/releases/download/v1.0.5/dev.eclipsememo_1.0.5.jar)를 **Eclipse 설치 폴더의 `dropins` 폴더**에 복사한 뒤 다시 실행합니다. 이전 버전의 메모 JAR가 있으면 새 파일로 교체하고, 설치 방법 중 하나만 사용하세요.
 
 ### Eclipse Marketplace 설치
 
@@ -35,6 +37,11 @@ JAR로 설치하려면 Eclipse를 종료하고 [dev.eclipsememo_1.0.2.jar](https
 - **이름 변경:** 파일을 선택하고 `F2` 또는 우클릭 → `이름 변경…`을 선택합니다.
 - **삭제:** 파일 또는 빈 폴더를 선택하고 `Delete`를 누릅니다. 확인하면 휴지통을 거치지 않고 삭제됩니다.
 - **새로고침:** 목록에서 `F5` 또는 **새로고침** 버튼을 누릅니다. 외부 파일 변경도 자동 반영됩니다.
+- **숨기기:** `워크스페이스 파일` 목록이나 제목 우클릭 → **워크스페이스 파일 숨기기**를 선택합니다.
+- **다시 표시 — 우클릭:** Package Explorer의 프로젝트 트리나 빈 공간 우클릭 → **워크스페이스 파일 표시**를 체크합니다.
+- **다시 표시 — 뷰 메뉴:** Package Explorer 또는 Project Explorer 오른쪽 위 **뷰 메뉴(▼ 또는 ⋮) → 워크스페이스 파일 표시**를 체크합니다. 이 체크 항목으로 숨길 수도 있습니다.
+
+표시 여부는 탐색기별로 저장되어 Eclipse를 다시 실행해도 유지됩니다.
 
 새 파일은 UTF-8로 저장하며, 기존 UTF-8·CP949 파일은 일반 저장 시 인코딩을 유지합니다. 프로젝트 파일은 기존 프로젝트 트리에서 관리합니다.
 

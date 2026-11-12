@@ -5,7 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -14,6 +17,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Image;
@@ -22,6 +27,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
@@ -37,11 +43,24 @@ public final class FilePane implements AutoCloseable {
     private final TreeViewer viewer;
     private final ToolBarManager toolbar;
     private final MenuManager menu;
+    private final IMenuManager explorerMenu;
+    private final Action showFiles;
+    private final String hiddenPreference;
     private Runnable disposed = () -> {};
 
     FilePane(IViewPart view, TreeViewer originalViewer, WorkspaceFiles files) {
         this.view = view;
         this.files = files;
+        hiddenPreference = "hideWorkspaceFiles." + view.getSite().getId();
+        showFiles = new Action("워크스페이스 파일 표시", Action.AS_CHECK_BOX) {
+            @Override public void run() {
+                try { setFilesVisible(isChecked()); }
+                catch (IOException ex) { Activator.error(view.getSite().getShell(), "표시 상태를 저장하지 못했습니다.", ex); }
+            }
+        };
+        showFiles.setId("dev.eclipsememo.showWorkspaceFiles");
+        showFiles.setChecked(!Activator.getDefault().getPreferenceStore().getBoolean(hiddenPreference));
+        explorerMenu = view.getViewSite().getActionBars().getMenuManager();
         originalArea = originalViewer.getControl().getParent();
         originalParent = originalArea.getParent();
         split = new SashForm(originalParent, SWT.VERTICAL);
@@ -139,15 +158,50 @@ public final class FilePane implements AutoCloseable {
         menu.add(action("이름 변경…", null, this::rename));
         menu.add(action("삭제…", null, this::delete));
         menu.add(refresh);
+        menu.add(new Separator());
+        menu.add(action("워크스페이스 파일 숨기기", null, () -> setFilesVisible(false)));
         viewer.getControl().setMenu(menu.createContextMenu(viewer.getControl()));
+        heading.setMenu(viewer.getControl().getMenu());
+        title.setMenu(viewer.getControl().getMenu());
         split.setWeights(new int[] { 65, 35 });
-        split.addDisposeListener(event -> { toolbar.dispose(); menu.dispose(); disposed.run(); });
+        explorerMenu.add(showFiles);
+        explorerMenu.update(true);
+        view.getViewSite().getActionBars().updateActionBars();
+        if ("org.eclipse.jdt.ui.PackageExplorer".equals(view.getSite().getId())) {
+            Menu contextMenu = originalViewer.getControl().getMenu();
+            if (contextMenu != null && contextMenu.getData(MenuManager.MANAGER_KEY) instanceof IMenuManager) {
+                IMenuManager packageMenu = (IMenuManager) contextMenu.getData(MenuManager.MANAGER_KEY);
+                // Package Explorer rebuilds its context menu for each selection, including empty space.
+                IMenuListener addShowFiles = manager -> {
+                    if (manager.find(showFiles.getId()) == null) manager.add(showFiles);
+                };
+                packageMenu.addMenuListener(addShowFiles);
+                split.addDisposeListener(event -> {
+                    packageMenu.removeMenuListener(addShowFiles);
+                    packageMenu.remove(showFiles.getId());
+                });
+            }
+        }
+        split.addDisposeListener(event -> {
+            explorerMenu.remove(showFiles.getId());
+            explorerMenu.update(true);
+            toolbar.dispose(); menu.dispose(); disposed.run();
+        });
         refresh();
         originalParent.layout(true, true);
     }
 
     public TreeViewer viewer() { return viewer; }
     public void onDispose(Runnable callback) { disposed = callback; }
+
+    private void setFilesVisible(boolean visible) throws IOException {
+        showFiles.setChecked(visible);
+        IPreferenceStore preferences = Activator.getDefault().getPreferenceStore();
+        preferences.setValue(hiddenPreference, !visible);
+        refresh();
+        if (!visible && !originalArea.isDisposed()) originalArea.setFocus();
+        if (preferences instanceof IPersistentPreferenceStore) ((IPersistentPreferenceStore) preferences).save();
+    }
 
     @FunctionalInterface private interface Operation { void run() throws Exception; }
     private Action action(String name, String image, Operation operation) {
@@ -225,7 +279,7 @@ public final class FilePane implements AutoCloseable {
         if (split.isDisposed()) return;
         viewer.refresh();
         boolean noProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects().length == 0;
-        Composite maximized = noProjects ? fileArea : null;
+        Composite maximized = !showFiles.isChecked() ? originalArea : noProjects ? fileArea : null;
         if (split.getMaximizedControl() != maximized) split.setMaximizedControl(maximized);
     }
 

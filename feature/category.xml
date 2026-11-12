@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-  <feature url="features/dev.eclipsememo.feature_1.0.2.jar"
-      id="dev.eclipsememo.feature" version="1.0.2">
+  <feature url="features/dev.eclipsememo.feature_1.0.5.jar"
+      id="dev.eclipsememo.feature" version="1.0.5">
     <category name="workspace-memo"/>
   </feature>
   <category-def name="workspace-memo" label="Workspace Tools">

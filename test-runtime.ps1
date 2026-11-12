@@ -20,9 +20,9 @@ New-Item -ItemType Directory -Force -Path $configuration, $workspace, $classes |
 $platformClasspath = (Get-ChildItem -LiteralPath $pluginDir -Filter '*.jar' |
     Where-Object { $_.Name -match '^(org\.eclipse\.(core|equinox|osgi|jface|swt|ui|text|jdt)|org\.osgi)' } |
     ForEach-Object { $_.FullName.Replace('\', '/') }) -join ';'
-$mainJar = Join-Path $runtimeRoot 'dev.eclipsememo_1.0.2.jar'
-$pluginSource = if ($UseInstalledPlugin) { Join-Path $pluginDir 'dev.eclipsememo_1.0.2.jar' }
-    else { Join-Path $repoRoot 'dist\dev.eclipsememo_1.0.2.jar' }
+$mainJar = Join-Path $runtimeRoot 'dev.eclipsememo_1.0.5.jar'
+$pluginSource = if ($UseInstalledPlugin) { Join-Path $pluginDir 'dev.eclipsememo_1.0.5.jar' }
+    else { Join-Path $repoRoot 'dist\dev.eclipsememo_1.0.5.jar' }
 Copy-Item -LiteralPath $pluginSource -Destination $mainJar
 $argsForCompiler = @('--release', '11', '-encoding', 'UTF-8', '-d', ('"' + $classes.Replace('\', '/') + '"'),
     '-classpath', ('"' + $mainJar.Replace('\', '/') + ';' + $platformClasspath + '"'))
@@ -50,10 +50,10 @@ $bundleLines = Get-Content -LiteralPath (Join-Path $EclipseHome 'configuration\o
     }
 if ($UseInstalledPlugin) {
     $installedEntries = @($bundleLines | Where-Object { $_ -match '^dev\.eclipsememo,' })
-    if ($installedEntries.Count -ne 1 -or $installedEntries[0] -notmatch '^dev\.eclipsememo,1\.0\.2,') {
-        throw 'The installed bundles.info must enable exactly one Memo 1.0.2 bundle.'
+    if ($installedEntries.Count -ne 1 -or $installedEntries[0] -notmatch '^dev\.eclipsememo,1\.0\.5,') {
+        throw 'The installed bundles.info must enable exactly one Memo 1.0.5 bundle.'
     }
-} else { $bundleLines += 'dev.eclipsememo,1.0.2,' + (ConvertTo-FileUri $mainJar) + ',4,false' }
+} else { $bundleLines += 'dev.eclipsememo,1.0.5,' + (ConvertTo-FileUri $mainJar) + ',4,false' }
 $bundleLines += 'dev.eclipsememo.tests,1.0.0,' + (ConvertTo-FileUri $testJar) + ',4,false'
 $bundleInfo = Join-Path $configuration 'bundles.info'
 [IO.File]::WriteAllLines($bundleInfo, $bundleLines, [Text.UTF8Encoding]::new($false))
